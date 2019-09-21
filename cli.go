@@ -6,7 +6,7 @@ import (
 	"fmt"	
 	"io/ioutil"
 	"cli-tool/ls"
-	"cli-tool/rename"
+	"cli-tool/mv"
 	"cli-tool/utilities"
 	"github.com/urfave/cli"
 )
@@ -45,19 +45,19 @@ func main() {
 			},
 		},
 		{
-			Name: "rename",
-			Usage: "Renames a file or a folder. `old-name` and `new-name` follows `rename` respectively and they specify relative paths.", 
+			Name: "mv",
+			Usage: "Moves and Renames a file or a folder. `old-name` and `new-name` follows `rename` respectively and they specify relative paths.", 
 			Flags: flags,
 			Action: func(c *cli.Context) error {
-				indexOfRename := utilities.FindIndexOfCommandInOsArgs(os.Args, "rename")
+				indexOfCommand := utilities.FindIndexOfCommandInOsArgs(os.Args, "mv")
 
-				if utilities.OsArgsHaveSufficientNumberOfArgs(len(os.Args), indexOfRename, 2) {
-					oldName := os.Args[indexOfRename + 1]
-					newName := os.Args[indexOfRename + 2]					
+				if utilities.OsArgsHaveSufficientNumberOfArgs(len(os.Args), indexOfCommand, 2) {
+					oldName := os.Args[indexOfCommand + 1]
+					newName := os.Args[indexOfCommand + 2]					
 
 					if utilities.FileExists(oldName) {
 						if newName != "" {
-							rename.RenameFile(oldName, newName)
+							mv.MoveFile(oldName, newName)
 						}
 					} else {
 						fmt.Println(oldName, "doesn't exist! Please specify the paths correctly.")

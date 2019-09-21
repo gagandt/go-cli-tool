@@ -1,4 +1,4 @@
-package rename
+package mv
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func RenameFile(oldName, newName string) {
+func MoveFile(oldName, newName string) {
 	err := os.Rename("./" + oldName, "./" + newName)
 	
 	if err != nil {
