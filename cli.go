@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"log"	
 	"io/ioutil"
+	"cli-tool/ls"
 	"github.com/urfave/cli"
 )
 
@@ -16,7 +16,7 @@ func main() {
 	flags := []cli.Flag {
 		cli.StringFlag {
 			Name: "view-options",
-			Value: "a",
+			Value: "",
 		},
 	}
 
@@ -31,16 +31,19 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				for _, file := range(files) {
-					fmt.Println(file.Name())
-				}
-				fmt.Println(c.String("view-options") == "l");
+				
+				mode := c.String("view-options")
+				if mode == "" {
+					ls.ShowNonHiddedFilesAndFolders(files)
+				} else if mode == "a" {
+					ls.ShowAllFilesAndFolders(files)
+				}				
+				
 				return nil
 			},
 		},
 	}
 	
-
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
