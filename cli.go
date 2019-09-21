@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"cli-tool/ls"
 	"cli-tool/mv"
+	"cli-tool/rm"
 	"cli-tool/utilities"
 	"github.com/urfave/cli"
 )
@@ -66,6 +67,22 @@ func main() {
 					fmt.Println("Please specify `old-name` and `new-name` in terms of specify relative paths.")
 				}
 
+				return nil
+			},
+		},
+		{
+			Name: "rm",
+			Usage: "Deletes files and folders.",
+			Flags: flags,
+			Action: func(c *cli.Context) error {
+				indexOfCommand := utilities.FindIndexOfCommandInOsArgs(os.Args, "rm")
+
+				if utilities.OsArgsHaveSufficientNumberOfArgs(len(os.Args), indexOfCommand, 1) {
+					fileName := os.Args[indexOfCommand + 1]
+					rm.Delete(fileName)
+				} else {
+					fmt.Println("Please provide the file to be deleted.")
+				}
 				return nil
 			},
 		},
