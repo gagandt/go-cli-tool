@@ -2,9 +2,12 @@ package main
 
 import (
 	"os"
-	"log"	
+	"log"
+	"fmt"	
 	"io/ioutil"
 	"cli-tool/ls"
+	"cli-tool/rename"
+	"cli-tool/utilities"
 	"github.com/urfave/cli"
 )
 
@@ -19,7 +22,6 @@ func main() {
 			Value: "",
 		},
 	}
-
 
 	app.Commands = []cli.Command {
 		{
@@ -39,6 +41,31 @@ func main() {
 					ls.ShowAllFilesAndFolders(files)
 				}				
 				
+				return nil
+			},
+		},
+		{
+			Name: "rename",
+			Usage: "Renames a file or a folder. `old-name` and `new-name` follows `rename` respectively and they specify relative paths.", 
+			Flags: flags,
+			Action: func(c *cli.Context) error {
+				indexOfRename := utilities.FindIndexOfCommandInOsArgs(os.Args, "rename")
+
+				if utilities.OsArgsHaveSufficientNumberOfArgs(len(os.Args), indexOfRename, 2) {
+					oldName := os.Args[indexOfRename + 1]
+					newName := os.Args[indexOfRename + 2]					
+
+					if utilities.FileExists(oldName) {
+						if newName != "" {
+							rename.RenameFile(oldName, newName)
+						}
+					} else {
+						fmt.Println(oldName, "doesn't exist! Please specify the paths correctly.")
+					}
+				} else {
+					fmt.Println("Please specify `old-name` and `new-name` in terms of specify relative paths.")
+				}
+
 				return nil
 			},
 		},
